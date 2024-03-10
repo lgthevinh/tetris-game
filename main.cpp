@@ -80,6 +80,15 @@ TetrominoData Tetrominos[7] = {
   }
 };
 
+class Tetromino {
+  public:
+    int x, y;
+    TetrominoData data;
+    void getData() {
+      data = Tetrominos[rand() % 7];
+    }
+};
+
 void update() {
 } 
 
