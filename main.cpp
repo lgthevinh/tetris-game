@@ -9,6 +9,12 @@ const int HEIGHT = Rows * TitleSize;
 
 bool Field[Rows][Columns] = {0};
 
+struct Tetronimo {
+  int pos_x, pos_y;
+  const int* shape;
+  int size;
+};
+
 const int Tetronimo_I[] = {
   0, 0, 0, 0,
   1, 1, 1, 1,
@@ -50,11 +56,15 @@ const int Tetronimo_L[] = {
   0, 0, 0
 };
 
-void input() {
-
-}
-
-void update() {}
+const Tetronimo Tetronimos[] = {
+  {0, 0, Tetronimo_I, 4},
+  {0, 0, Tetronimo_O, 2},
+  {0, 0, Tetronimo_T, 3},
+  {0, 0, Tetronimo_S, 3},
+  {0, 0, Tetronimo_Z, 3},
+  {0, 0, Tetronimo_J, 3},
+  {0, 0, Tetronimo_L, 3}
+};
 
 void render(SDL_Renderer* renderer) {
   //Draw background
