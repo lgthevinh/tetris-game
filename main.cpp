@@ -87,6 +87,12 @@ class Tetromino {
     void getData() {
       data = Tetrominos[rand() % 7];
     }
+    bool isCollided() {
+      if (x < 0 || x > Columns || y > Rows) {
+        return true;
+      }
+      return false;
+    }
 };
 
 void update() {
