@@ -89,7 +89,7 @@ class Tetromino {
     int x, y;
     TetrominoData data;
     Tetromino() {
-      x = 0;
+      x = Columns / 2 - 2;
       y = 0;
       getData();
     }
@@ -97,7 +97,7 @@ class Tetromino {
       data = Tetrominos[rand() % 7];
     }
     bool isCollided() {
-      if (x < 0 || x > Columns || y > Rows) {
+      if (x < 0 || x+4 > Columns || y+4 > Rows) { // Because the tetromino is 4x4, so add 4 to x and y
         return true;
       }
       return false;
@@ -109,15 +109,22 @@ Tetromino currentTetromino = Tetromino();
 void update() {
   currentTime = SDL_GetTicks();
   deltaTime = currentTime - lastTime;
-  if (currentTetromino.isCollided()) {
-    currentTetromino = Tetromino();
-  }
-  if (deltaTime > 1000) {
+  if (deltaTime > 500) {
     //Move down
     currentTetromino.y++;
     lastTime = currentTime;
-    std::cout << "X: " << currentTetromino.x << " Y: " << currentTetromino.y << std::endl;
     deltaTime = 0;
+    if (currentTetromino.isCollided()) {
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          if (currentTetromino.data.shape[i][j]) {
+            Field[currentTetromino.y + i][currentTetromino.x + j] = 1;
+          }
+        }
+      }
+      Tetromino* tetromino = new Tetromino();
+      currentTetromino = *tetromino;
+    }
   }
 } 
 
@@ -167,6 +174,18 @@ int main(int argc, char* argv[]) {
     if (SDL_PollEvent(&window_event)) {
       if (window_event.type == SDL_QUIT|| window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         is_running = false;
+      }
+      if (window_event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
+        currentTetromino.x--;
+        if (currentTetromino.isCollided()) {
+          currentTetromino.x++;
+        }
+      }
+      if (window_event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+        currentTetromino.x++;
+        if (currentTetromino.isCollided()) {
+          currentTetromino.x--;
+        }
       }
     }
     update();
