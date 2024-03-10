@@ -141,10 +141,6 @@ void update() {
 } 
 
 void render(SDL_Renderer* renderer) {
-  //Draw background
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_RenderClear(renderer);
-
   //Draw field
   for (int i = 0; i < Rows; i++) {
     for (int j = 0; j < Columns; j++) {
@@ -180,6 +176,10 @@ int main(int argc, char* argv[]) {
   
   SDL_Event window_event;
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  
+  //Set background color
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+  SDL_RenderClear(renderer);
 
   bool is_running = true;
   while (is_running) {
