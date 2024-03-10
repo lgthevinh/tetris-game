@@ -7,9 +7,9 @@ const int Rows = 20, Columns = 10;
 const int WIDTH = Columns * TitleSize;
 const int HEIGHT = Rows * TitleSize;
 
-int deltaTime = 0; // 1 second = 1000 milliseconds;
-int currentTime = SDL_GetTicks();
-int lastTime = currentTime;
+int deltatime = 0; // 1 second = 1000 milliseconds;
+int current_time = SDL_GetTicks();
+int last_time = current_time;
 
 bool Field[Rows][Columns] = {0};
 
@@ -108,6 +108,26 @@ class Tetromino {
       }
       return false;
     }
+    void rotate() {
+      int temp[4][4];
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          temp[i][j] = data.shape[i][j];
+        }
+      }
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          data.shape[i][j] = temp[3 - j][i];
+        }
+      }
+      if (isCollided()) {
+        for (int i = 0; i < 4; i++) {
+          for (int j = 0; j < 4; j++) {
+            data.shape[i][j] = temp[i][j];
+          }
+        }
+      }
+    }
     void hardDrop() {
       while (!isCollided()) {
         y++;
@@ -116,26 +136,26 @@ class Tetromino {
     }
 };
 
-Tetromino currentTetromino = Tetromino();
+Tetromino CurrentTetromino = Tetromino();
 
 void update() {
-  currentTime = SDL_GetTicks();
-  deltaTime = currentTime - lastTime;
-  if (deltaTime > 500) {
+  current_time = SDL_GetTicks();
+  deltatime = current_time - last_time;
+  if (deltatime > 500) {
     //Move down
-    currentTetromino.y++;
-    lastTime = currentTime;
-    deltaTime = 0;
-    if (currentTetromino.isCollided()) {
+    CurrentTetromino.y++;
+    last_time = current_time;
+    deltatime = 0;
+    if (CurrentTetromino.isCollided()) {
       for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-          if (currentTetromino.data.shape[i][j]) {
-            Field[currentTetromino.y + i-1][currentTetromino.x + j] = 1;
+          if (CurrentTetromino.data.shape[i][j]) {
+            Field[CurrentTetromino.y + i-1][CurrentTetromino.x + j] = 1;
           }
         }
       }
       Tetromino* tetromino = new Tetromino();
-      currentTetromino = *tetromino;
+      CurrentTetromino = *tetromino;
     }
   }
 } 
@@ -152,11 +172,11 @@ void render(SDL_Renderer* renderer) {
     }
   }
   //Draw tetronimo
-  SDL_SetRenderDrawColor(renderer, currentTetromino.data.color_r, currentTetromino.data.color_g, currentTetromino.data.color_b, 255);
+  SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
-      if (currentTetromino.data.shape[i][j]) {
-        SDL_Rect tile = {(currentTetromino.x + j) * TitleSize+2, (currentTetromino.y + i) * TitleSize+2, TitleSize-4, TitleSize-4};
+      if (CurrentTetromino.data.shape[i][j]) {
+        SDL_Rect tile = {(CurrentTetromino.x + j) * TitleSize+2, (CurrentTetromino.y + i) * TitleSize+2, TitleSize-4, TitleSize-4};
         SDL_RenderFillRect(renderer, &tile);
       }
     }
@@ -188,30 +208,33 @@ int main(int argc, char* argv[]) {
         is_running = false;
       }
       if (window_event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-        currentTetromino.x--;
-        if (currentTetromino.isCollided()) {
-          currentTetromino.x++;
+        CurrentTetromino.x--;
+        if (CurrentTetromino.isCollided()) {
+          CurrentTetromino.x++;
         }
       }
       if (window_event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-        currentTetromino.x++;
-        if (currentTetromino.isCollided()) {
-          currentTetromino.x--;
+        CurrentTetromino.x++;
+        if (CurrentTetromino.isCollided()) {
+          CurrentTetromino.x--;
         }
       }
       if (window_event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-        currentTetromino.y++;
-        if (currentTetromino.isCollided()) {
-          currentTetromino.y--;
+        CurrentTetromino.y++;
+        if (CurrentTetromino.isCollided()) {
+          CurrentTetromino.y--;
         }
       }
       if (window_event.key.keysym.scancode == SDL_SCANCODE_UP) {
-        currentTetromino.hardDrop();
+        CurrentTetromino.hardDrop();
+      }
+      if (window_event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+        CurrentTetromino.rotate();
       }
     }
     update();
     render(renderer);
-    if (Field[0][Columns / 2] && currentTetromino.isCollided()) {
+    if (Field[0][Columns / 2] && CurrentTetromino.isCollided()) {
       is_running = false;
     }
   }
