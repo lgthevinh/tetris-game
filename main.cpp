@@ -108,6 +108,12 @@ class Tetromino {
       }
       return false;
     }
+    void hardDrop() {
+      while (!isCollided()) {
+        y++;
+      }
+      y--;
+    }
 };
 
 Tetromino currentTetromino = Tetromino();
@@ -192,6 +198,15 @@ int main(int argc, char* argv[]) {
         if (currentTetromino.isCollided()) {
           currentTetromino.x--;
         }
+      }
+      if (window_event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+        currentTetromino.y++;
+        if (currentTetromino.isCollided()) {
+          currentTetromino.y--;
+        }
+      }
+      if (window_event.key.keysym.scancode == SDL_SCANCODE_UP) {
+        currentTetromino.hardDrop();
       }
     }
     update();
