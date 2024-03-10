@@ -9,82 +9,78 @@ const int HEIGHT = Rows * TitleSize;
 
 bool Field[Rows][Columns] = {0};
 
-struct Tetronimo {
-  int pos_x, pos_y;
-  const int* shape;
-  int size;
+struct TetrominoData {
+  int shape[4][4];
+  int color_r, color_g, color_b;
 };
 
-Tetronimo currentTetronimo;
-
-const int Tetronimo_I[] = {
-  0, 0, 0, 0,
-  1, 1, 1, 1,
-  0, 0, 0, 0,
-  0, 0, 0, 0
-};
-
-const int Tetronimo_O[] = {
-  1, 1,
-  1, 1
-};
-
-const int Tetronimo_T[] = {
-  0, 1, 0,
-  1, 1, 1,
-};
-
-const int Tetronimo_S[] = {
-  0, 1, 1,
-  1, 1, 0,
-  0, 0, 0
-};
-
-const int Tetronimo_Z[] = {
-  1, 1, 0,
-  0, 1, 1,
-  0, 0, 0
-};
-
-const int Tetronimo_J[] = {
-  1, 0, 0,
-  1, 1, 1,
-  0, 0, 0
-};
-
-const int Tetronimo_L[] = {
-  0, 0, 1,
-  1, 1, 1,
-  0, 0, 0
-};
-
-const Tetronimo Tetronimos[] = {
-  {0, 0, Tetronimo_I, 4},
-  {0, 0, Tetronimo_O, 2},
-  {0, 0, Tetronimo_T, 3},
-  {0, 0, Tetronimo_S, 3},
-  {0, 0, Tetronimo_Z, 3},
-  {0, 0, Tetronimo_J, 3},
-  {0, 0, Tetronimo_L, 3}
+TetrominoData Tetrominos[7] = {
+  {
+    {
+      {0, 0, 0, 0},
+      {1, 1, 1, 1},
+      {0, 0, 0, 0},
+      {0, 0, 0, 0}
+    },
+    255, 0, 0
+  },
+  {
+    {
+      {0, 0, 0, 0},
+      {0, 1, 1, 0},
+      {0, 1, 1, 0},
+      {0, 0, 0, 0}
+    },
+    0, 255, 0
+  },
+  {
+    {
+      {0, 0, 0, 0},
+      {0, 1, 1, 0},
+      {1, 1, 0, 0},
+      {0, 0, 0, 0}
+    },
+    0, 0, 255
+  },
+  {
+    {
+      {0, 0, 0, 0},
+      {1, 1, 0, 0},
+      {0, 1, 1, 0},
+      {0, 0, 0, 0}
+    },
+    255, 255, 0
+  },
+  {
+    {
+      {0, 0, 0, 0},
+      {0, 1, 0, 0},
+      {1, 1, 1, 0},
+      {0, 0, 0, 0}
+    },
+    255, 0, 255
+  },
+  {
+    {
+      {0, 0, 0, 0},
+      {1, 1, 1, 0},
+      {0, 0, 1, 0},
+      {0, 0, 0, 0}
+    },
+    0, 255, 255
+  },
+  {
+    {
+      {0, 0, 0, 0},
+      {0, 1, 0, 0},
+      {1, 1, 1, 0},
+      {0, 0, 0, 0}
+    },
+    255, 165, 0
+  }
 };
 
 void update() {
-  //Update
-  if(currentTetronimo.pos_y < Rows) {
-    currentTetronimo.pos_y++;
-  }
-  else {
-    //Place the tetronimo on the field
-    for (int i = 0; i < currentTetronimo.size; i++) {
-      for (int j = 0; j < currentTetronimo.size; j++) {
-        if (currentTetronimo.shape[i * currentTetronimo.size + j]) {
-          Field[currentTetronimo.pos_y + i][currentTetronimo.pos_x + j] = 1;
-        }
-      }
-    }
-    //Spawn a new tetronimo
-    currentTetronimo = Tetronimos[rand() % 7];
-  }
 } 
 
 void render(SDL_Renderer* renderer) {
