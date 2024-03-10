@@ -107,7 +107,18 @@ class Tetromino {
 Tetromino currentTetromino = Tetromino();
 
 void update() {
-  
+  currentTime = SDL_GetTicks();
+  deltaTime = currentTime - lastTime;
+  if (currentTetromino.isCollided()) {
+    currentTetromino = Tetromino();
+  }
+  if (deltaTime > 1000) {
+    //Move down
+    currentTetromino.y++;
+    lastTime = currentTime;
+    std::cout << "X: " << currentTetromino.x << " Y: " << currentTetromino.y << std::endl;
+    deltaTime = 0;
+  }
 } 
 
 void render(SDL_Renderer* renderer) {
