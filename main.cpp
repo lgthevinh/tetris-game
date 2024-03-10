@@ -15,6 +15,8 @@ struct Tetronimo {
   int size;
 };
 
+Tetronimo currentTetronimo;
+
 const int Tetronimo_I[] = {
   0, 0, 0, 0,
   1, 1, 1, 1,
@@ -66,6 +68,25 @@ const Tetronimo Tetronimos[] = {
   {0, 0, Tetronimo_L, 3}
 };
 
+void update() {
+  //Update
+  if(currentTetronimo.pos_y < Rows) {
+    currentTetronimo.pos_y++;
+  }
+  else {
+    //Place the tetronimo on the field
+    for (int i = 0; i < currentTetronimo.size; i++) {
+      for (int j = 0; j < currentTetronimo.size; j++) {
+        if (currentTetronimo.shape[i * currentTetronimo.size + j]) {
+          Field[currentTetronimo.pos_y + i][currentTetronimo.pos_x + j] = 1;
+        }
+      }
+    }
+    //Spawn a new tetronimo
+    currentTetronimo = Tetronimos[rand() % 7];
+  }
+} 
+
 void render(SDL_Renderer* renderer) {
   //Draw background
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -81,9 +102,8 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
-
   //Draw tetronimo
-
+  
   //Present
   SDL_RenderPresent(renderer);
 }
