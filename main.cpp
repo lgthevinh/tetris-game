@@ -97,8 +97,14 @@ class Tetromino {
       data = Tetrominos[rand() % 7];
     }
     bool isCollided() {
-      if (x < 0 || x+4 > Columns || y+4 > Rows) { // Because the tetromino is 4x4, so add 4 to x and y
-        return true;
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          if (data.shape[i][j]) {
+            if (i + y >= Rows || j + x < 0 || j + x >= Columns || Field[i + y][j + x]) {
+              return true;
+            }
+          }
+        }
       }
       return false;
     }
@@ -118,7 +124,7 @@ void update() {
       for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
           if (currentTetromino.data.shape[i][j]) {
-            Field[currentTetromino.y + i][currentTetromino.x + j] = 1;
+            Field[currentTetromino.y + i-1][currentTetromino.x + j] = 1;
           }
         }
       }
