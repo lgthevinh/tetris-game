@@ -9,6 +9,47 @@ const int HEIGHT = Rows * TitleSize;
 
 bool Field[Rows][Columns] = {0};
 
+const int Tetronimo_I[] = {
+  0, 0, 0, 0,
+  1, 1, 1, 1,
+  0, 0, 0, 0,
+  0, 0, 0, 0
+};
+
+const int Tetronimo_O[] = {
+  1, 1,
+  1, 1
+};
+
+const int Tetronimo_T[] = {
+  0, 1, 0,
+  1, 1, 1,
+};
+
+const int Tetronimo_S[] = {
+  0, 1, 1,
+  1, 1, 0,
+  0, 0, 0
+};
+
+const int Tetronimo_Z[] = {
+  1, 1, 0,
+  0, 1, 1,
+  0, 0, 0
+};
+
+const int Tetronimo_J[] = {
+  1, 0, 0,
+  1, 1, 1,
+  0, 0, 0
+};
+
+const int Tetronimo_L[] = {
+  0, 0, 1,
+  1, 1, 1,
+  0, 0, 0
+};
+
 void input() {
 
 }
