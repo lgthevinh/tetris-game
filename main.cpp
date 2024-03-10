@@ -137,7 +137,15 @@ void render(SDL_Renderer* renderer) {
     }
   }
   //Draw tetronimo
-
+  SDL_SetRenderDrawColor(renderer, currentTetromino.data.color_r, currentTetromino.data.color_g, currentTetromino.data.color_b, 255);
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      if (currentTetromino.data.shape[i][j]) {
+        SDL_Rect tile = {(currentTetromino.x + j) * TitleSize+2, (currentTetromino.y + i) * TitleSize+2, TitleSize-4, TitleSize-4};
+        SDL_RenderFillRect(renderer, &tile);
+      }
+    }
+  }
   //Present
   SDL_RenderPresent(renderer);
 }
