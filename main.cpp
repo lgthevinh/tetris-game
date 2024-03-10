@@ -90,7 +90,7 @@ class Tetromino {
     TetrominoData data;
     Tetromino() {
       x = Columns / 2 - 2;
-      y = 0;
+      y = -1;
       getData();
     }
     void getData() {
@@ -211,6 +211,9 @@ int main(int argc, char* argv[]) {
     }
     update();
     render(renderer);
+    if (Field[0][Columns / 2]) {
+      is_running = false;
+    }
   }
   
   SDL_DestroyWindow(window);
