@@ -7,6 +7,10 @@ const int Rows = 20, Columns = 10;
 const int WIDTH = Columns * TitleSize;
 const int HEIGHT = Rows * TitleSize;
 
+int deltaTime = 0; // 1 second = 1000 milliseconds;
+int currentTime = SDL_GetTicks();
+int lastTime = currentTime;
+
 bool Field[Rows][Columns] = {0};
 
 struct TetrominoData {
@@ -84,6 +88,11 @@ class Tetromino {
   public:
     int x, y;
     TetrominoData data;
+    Tetromino() {
+      x = 0;
+      y = 0;
+      getData();
+    }
     void getData() {
       data = Tetrominos[rand() % 7];
     }
@@ -95,7 +104,10 @@ class Tetromino {
     }
 };
 
+Tetromino currentTetromino = Tetromino();
+
 void update() {
+  
 } 
 
 void render(SDL_Renderer* renderer) {
@@ -106,7 +118,7 @@ void render(SDL_Renderer* renderer) {
   //Draw field
   for (int i = 0; i < Rows; i++) {
     for (int j = 0; j < Columns; j++) {
-      if (Field[i][j]) {
+      if (!Field[i][j]) {
         SDL_Rect tile = {j * TitleSize+2, i * TitleSize+2, TitleSize-4, TitleSize-4};
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderFillRect(renderer, &tile);
@@ -114,7 +126,7 @@ void render(SDL_Renderer* renderer) {
     }
   }
   //Draw tetronimo
-  
+
   //Present
   SDL_RenderPresent(renderer);
 }
@@ -137,9 +149,9 @@ int main(int argc, char* argv[]) {
       if (window_event.type == SDL_QUIT|| window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         is_running = false;
       }
-      
-      render(renderer);
     }
+    update();
+    render(renderer);
   }
   
   SDL_DestroyWindow(window);
