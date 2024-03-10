@@ -176,7 +176,7 @@ int main(int argc, char* argv[]) {
   
   SDL_Event window_event;
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-  
+
   //Set background color
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderClear(renderer);
@@ -184,7 +184,7 @@ int main(int argc, char* argv[]) {
   bool is_running = true;
   while (is_running) {
     if (SDL_PollEvent(&window_event)) {
-      if (window_event.type == SDL_QUIT|| window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+      if (window_event.type == SDL_QUIT || window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         is_running = false;
       }
       if (window_event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
@@ -211,7 +211,7 @@ int main(int argc, char* argv[]) {
     }
     update();
     render(renderer);
-    if (Field[0][Columns / 2]) {
+    if (Field[0][Columns / 2] && currentTetromino.isCollided()) {
       is_running = false;
     }
   }
