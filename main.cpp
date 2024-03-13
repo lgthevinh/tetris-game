@@ -229,29 +229,35 @@ int main(int argc, char* argv[]) {
       if (window_event.type == SDL_QUIT || window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         is_running = false;
       }
-      if (window_event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-        CurrentTetromino.x--;
-        if (CurrentTetromino.isCollided()) {
-          CurrentTetromino.x++;
+      if (window_event.type == SDL_KEYDOWN) {
+        switch (window_event.key.keysym.scancode) {
+          case SDL_SCANCODE_A:
+            CurrentTetromino.x--;
+            if (CurrentTetromino.isCollided()) {
+              CurrentTetromino.x++;
+            }
+            break;
+          case SDL_SCANCODE_D:
+            CurrentTetromino.x++;
+            if (CurrentTetromino.isCollided()) {
+              CurrentTetromino.x--;
+            }
+            break;
+          case SDL_SCANCODE_S:
+            CurrentTetromino.y++;
+            if (CurrentTetromino.isCollided()) {
+              CurrentTetromino.y--;
+            }
+            break;
+          case SDL_SCANCODE_W:
+            CurrentTetromino.hardDrop();
+            break;
+          case SDL_SCANCODE_SPACE:
+            CurrentTetromino.rotate();
+            break;
+          default:
+            break;
         }
-      }
-      if (window_event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-        CurrentTetromino.x++;
-        if (CurrentTetromino.isCollided()) {
-          CurrentTetromino.x--;
-        }
-      }
-      if (window_event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-        CurrentTetromino.y++;
-        if (CurrentTetromino.isCollided()) {
-          CurrentTetromino.y--;
-        }
-      }
-      if (window_event.key.keysym.scancode == SDL_SCANCODE_UP) {
-        CurrentTetromino.hardDrop();
-      }
-      if (window_event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
-        CurrentTetromino.rotate();
       }
     }
     update();
