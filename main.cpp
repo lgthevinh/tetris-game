@@ -167,7 +167,8 @@ void update() {
     CurrentTetromino.y++;
     last_time = current_time;
     deltatime = 0;
-    if (CurrentTetromino.isCollided()) {
+  }
+  if (CurrentTetromino.isCollided()) {
       for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
           if (CurrentTetromino.data.shape[i][j]) {
@@ -179,7 +180,6 @@ void update() {
       CurrentTetromino = *tetromino;
       destroyLine();
     }
-  }
 }
 
 void render(SDL_Renderer* renderer) {
@@ -229,7 +229,7 @@ int main(int argc, char* argv[]) {
       if (window_event.type == SDL_QUIT || window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         is_running = false;
       }
-      if (window_event.type == SDL_KEYDOWN) {
+      if (window_event.type == SDL_KEYDOWN && !CurrentTetromino.isCollided()) {
         switch (window_event.key.keysym.scancode) {
           case SDL_SCANCODE_A:
             CurrentTetromino.x--;
