@@ -138,6 +138,26 @@ class Tetromino {
 
 Tetromino CurrentTetromino = Tetromino();
 
+void destroyLine() {
+  for (int i = Rows - 1; i >= 0; i--) {
+    bool is_full = true;
+    for (int j = 0; j < Columns; j++) {
+      if (!Field[i][j]) {
+        is_full = false;
+        break;
+      }
+    }
+    if (is_full) {
+      for (int k = i; k > 0; k--) {
+        for (int j = 0; j < Columns; j++) {
+          Field[k][j] = Field[k - 1][j];
+        }
+      }
+      i++;
+    }
+  }
+}
+
 void update() {
   current_time = SDL_GetTicks();
   deltatime = current_time - last_time;
@@ -156,6 +176,7 @@ void update() {
       }
       Tetromino* tetromino = new Tetromino();
       CurrentTetromino = *tetromino;
+      destroyLine();
     }
   }
 } 
