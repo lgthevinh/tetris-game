@@ -87,6 +87,7 @@ TetrominoData Tetrominos[7] = {
 class Tetromino {
   public:
   int x, y;
+  int ghost_x, ghost_y;
   TetrominoData data;
   Tetromino() {
     x = Columns / 2 - 2;
@@ -203,6 +204,7 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
+  //Draw ghost
   //Present
   SDL_RenderPresent(renderer);
 }
