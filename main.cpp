@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 const int TitleSize = 30; // 10 pixels
 const int Rows = 20, Columns = 10;
@@ -230,6 +231,8 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
+  //Draw score
+  
   //Present
   SDL_RenderPresent(renderer);
 }
