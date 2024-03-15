@@ -171,6 +171,7 @@ void destroyLine() {
           Field[k][j] = Field[k - 1][j];
         }
       }
+      score += 100;
       i++;
     }
   }
