@@ -4,12 +4,19 @@
 const int TitleSize = 30; // 10 pixels
 const int Rows = 20, Columns = 10;
 
-const int WIDTH = Columns * TitleSize;
+const int WIDTH = Columns * TitleSize + 200; // 200 pixels for scoring display
 const int HEIGHT = Rows * TitleSize;
 
-int deltatime = 0; // 1 second = 1000 milliseconds;
+const int set_time = 700;
+
+const int x_display = WIDTH - 150;
+const int y_display = 50;
+
+int deltatime = 0; // 1 second = 1000 milliseconds
 int current_time = SDL_GetTicks();
 int last_time = current_time;
+
+int score = 0;
 
 bool Field[Rows][Columns] = { 0 };
 
@@ -148,8 +155,6 @@ class Tetromino {
   }
 };
 
-Tetromino CurrentTetromino = Tetromino();
-
 void destroyLine() {
   // Loop through each row, check for full row
   for (int i = Rows - 1; i >= 0; i--) {
@@ -170,6 +175,9 @@ void destroyLine() {
     }
   }
 }
+
+Tetromino CurrentTetromino = Tetromino();
+Tetromino NextTetromino = Tetromino();
 
 void render(SDL_Renderer* renderer) {
   //Draw field
@@ -228,8 +236,11 @@ void update(SDL_Renderer* renderer) {
         }
       }
     }
+
     Tetromino* tetromino = new Tetromino();
-    CurrentTetromino = *tetromino;
+    CurrentTetromino = NextTetromino;
+    NextTetromino = *tetromino;
+
     delete tetromino;
   }
   render(renderer);
