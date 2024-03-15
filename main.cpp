@@ -136,6 +136,16 @@ class Tetromino {
     }
     this->y--;
   }
+  void getGhost() {
+    ghost_x = x;
+    int temp = y;
+    while (!isCollided()) {
+      y++;
+    }
+    y--;
+    ghost_y = y;
+    y = temp;
+  }
 };
 
 Tetromino CurrentTetromino = Tetromino();
@@ -172,6 +182,20 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
+  //Draw ghost
+  CurrentTetromino.getGhost();
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      if (CurrentTetromino.data.shape[i][j]) {
+        SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
+        SDL_Rect outline = { (CurrentTetromino.ghost_x + j) * TitleSize + 2, (CurrentTetromino.ghost_y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+        SDL_RenderFillRect(renderer, &outline);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_Rect tile = { (CurrentTetromino.ghost_x + j) * TitleSize + 4, (CurrentTetromino.ghost_y + i) * TitleSize + 4, TitleSize - 9, TitleSize - 9 };
+        SDL_RenderFillRect(renderer, &tile);
+      }
+    }
+  }
   //Draw tetronimo
   SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
   for (int i = 0; i < 4; i++) {
@@ -182,7 +206,6 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
-  //Draw ghost
   //Present
   SDL_RenderPresent(renderer);
 }
@@ -238,14 +261,18 @@ int main(int argc, char* argv[]) {
         switch (window_event.key.keysym.scancode) {
           case SDL_SCANCODE_A:
             CurrentTetromino.x--;
+            CurrentTetromino.ghost_x--;
             if (CurrentTetromino.isCollided()) {
               CurrentTetromino.x++;
+              CurrentTetromino.ghost_x++;
             }
             break;
           case SDL_SCANCODE_D:
             CurrentTetromino.x++;
+            CurrentTetromino.ghost_x++;
             if (CurrentTetromino.isCollided()) {
               CurrentTetromino.x--;
+              CurrentTetromino.ghost_x--;
             }
             break;
           case SDL_SCANCODE_S:
