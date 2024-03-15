@@ -215,6 +215,21 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
+  //Draw Side Panel
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+  SDL_Rect side_panel = { Columns * TitleSize, 0, 200, HEIGHT };
+  SDL_RenderFillRect(renderer, &side_panel);
+
+  //Draw next tetronimo
+  SDL_SetRenderDrawColor(renderer, NextTetromino.data.color_r, NextTetromino.data.color_g, NextTetromino.data.color_b, 255);
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      if (NextTetromino.data.shape[i][j]) {
+        SDL_Rect tile = { (j + Columns + 2) * TitleSize - 20, (i + 2) * TitleSize, TitleSize - 4, TitleSize - 4 };
+        SDL_RenderFillRect(renderer, &tile);
+      }
+    }
+  }
   //Present
   SDL_RenderPresent(renderer);
 }
