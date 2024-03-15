@@ -109,6 +109,18 @@ class Tetromino {
     }
     return false;
   }
+  bool isLanded() {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (data.shape[i][j]) {
+          if (i + y >= Rows - 1 || Field[i + y + 1][j + x]) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
   void rotate() {
     int temp[4][4];
     for (int i = 0; i < 4; i++) {
@@ -163,6 +175,7 @@ void destroyLine() {
 void update() {
   current_time = SDL_GetTicks();
   deltatime = current_time - last_time;
+  destroyLine();
   if (deltatime > 500) {
     //Move down
     CurrentTetromino.y++;
@@ -177,9 +190,10 @@ void update() {
           }
         }
       }
-      Tetromino* tetromino = new Tetromino();
-      CurrentTetromino = *tetromino;
-      destroyLine();
+      if (CurrentTetromino.isLanded()) {
+        Tetromino* tetromino = new Tetromino();
+        CurrentTetromino = *tetromino;
+      }
     }
 }
 
