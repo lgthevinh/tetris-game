@@ -58,7 +58,7 @@ TetrominoData Tetrominos[7] = {
   {
     {
       {0, 0, 0, 0},
-      {0, 1, 0, 0},
+      {0, 0, 1, 0},
       {1, 1, 1, 0},
       {0, 0, 0, 0}
     },
@@ -109,18 +109,6 @@ class Tetromino {
     }
     return false;
   }
-  bool isLanded() {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        if (data.shape[i][j]) {
-          if (i + y >= Rows - 1 || Field[i + y + 1][j + x]) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
   void rotate() {
     int temp[4][4];
     for (int i = 0; i < 4; i++) {
@@ -133,19 +121,20 @@ class Tetromino {
         data.shape[i][j] = temp[3 - j][i];
       }
     }
-    if (isCollided()) {
-      for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-          data.shape[i][j] = temp[i][j];
-        }
-      }
+    // Move if tetromino is out of bounds
+    if (x < 0) {
+      x = 0;
     }
+    if (x > Columns - 4) {
+      x = Columns - 4;
+    }
+    
   }
   void hardDrop() {
     while (!isCollided()) {
-      y++;
+      this->y++;
     }
-    y--;
+    this->y--;
   }
 };
 
@@ -183,25 +172,24 @@ void update() {
     deltatime = 0;
   }
   if (CurrentTetromino.isCollided()) {
-      for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-          if (CurrentTetromino.data.shape[i][j]) {
-            Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j] = 1;
-          }
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (CurrentTetromino.data.shape[i][j]) {
+          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j] = 1;
         }
       }
-      if (CurrentTetromino.isLanded()) {
-        Tetromino* tetromino = new Tetromino();
-        CurrentTetromino = *tetromino;
-      }
     }
+    Tetromino* tetromino = new Tetromino();
+    CurrentTetromino = *tetromino;
+    delete tetromino;
+  }
 }
 
 void render(SDL_Renderer* renderer) {
   //Draw field
   for (int i = 0; i < Rows; i++) {
     for (int j = 0; j < Columns; j++) {
-      if (!Field[i][j]) {
+      if (Field[i][j] == 0) {
         SDL_Rect tile = { j * TitleSize + 2, i * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderFillRect(renderer, &tile);
