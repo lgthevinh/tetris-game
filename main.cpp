@@ -161,30 +161,6 @@ void destroyLine() {
   }
 }
 
-void update() {
-  current_time = SDL_GetTicks();
-  deltatime = current_time - last_time;
-  destroyLine();
-  if (deltatime > 500) {
-    //Move down
-    CurrentTetromino.y++;
-    last_time = current_time;
-    deltatime = 0;
-  }
-  if (CurrentTetromino.isCollided()) {
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        if (CurrentTetromino.data.shape[i][j]) {
-          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j] = 1;
-        }
-      }
-    }
-    Tetromino* tetromino = new Tetromino();
-    CurrentTetromino = *tetromino;
-    delete tetromino;
-  }
-}
-
 void render(SDL_Renderer* renderer) {
   //Draw field
   for (int i = 0; i < Rows; i++) {
@@ -209,6 +185,31 @@ void render(SDL_Renderer* renderer) {
   //Draw ghost
   //Present
   SDL_RenderPresent(renderer);
+}
+
+void update(SDL_Renderer* renderer) {
+  current_time = SDL_GetTicks();
+  deltatime = current_time - last_time;
+  destroyLine();
+  if (deltatime > 500) {
+    //Move down
+    CurrentTetromino.y++;
+    last_time = current_time;
+    deltatime = 0;
+  }
+  if (CurrentTetromino.isCollided()) {
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (CurrentTetromino.data.shape[i][j]) {
+          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j] = 1;
+        }
+      }
+    }
+    Tetromino* tetromino = new Tetromino();
+    CurrentTetromino = *tetromino;
+    delete tetromino;
+  }
+  render(renderer);
 }
 
 int main(int argc, char* argv[]) {
@@ -264,8 +265,7 @@ int main(int argc, char* argv[]) {
         }
       }
     }
-    update();
-    render(renderer);
+    update(renderer);
     if (Field[0][Columns / 2] && CurrentTetromino.isCollided()) {
       is_running = false;
     }
