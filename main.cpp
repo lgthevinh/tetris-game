@@ -243,7 +243,7 @@ void render(SDL_Renderer* renderer) {
   SDL_RenderPresent(renderer);
 }
 
-void update(SDL_Renderer* renderer) {
+void update() {
   current_time = SDL_GetTicks();
   deltatime = current_time - last_time;
   destroyLine();
@@ -271,7 +271,6 @@ void update(SDL_Renderer* renderer) {
 
     delete tetromino;
   }
-  render(renderer);
 }
 
 int main(int argc, char* argv[]) {
@@ -331,7 +330,8 @@ int main(int argc, char* argv[]) {
         }
       }
     }
-    update(renderer);
+    update();
+    render(renderer);
     if (Field[0][Columns / 2].isFilled && CurrentTetromino.isCollided()) {
       is_running = false;
     }
