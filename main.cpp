@@ -11,7 +11,7 @@ const int HEIGHT = Rows * TitleSize;
 const int set_time = 700;
 
 const int x_display = WIDTH - 150;
-const int y_display = 50;
+const int y_display = 200;
 
 int deltatime = 0; // 1 second = 1000 milliseconds
 int current_time = SDL_GetTicks();
@@ -224,7 +224,7 @@ void render(SDL_Renderer* renderer) {
   
   //Draw Side Panel
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_Rect side_panel = { Columns * TitleSize, 0, 200, HEIGHT };
+  SDL_Rect side_panel = { Columns * TitleSize, 0, 200, 200 };
   SDL_RenderFillRect(renderer, &side_panel);
 
   //Draw next tetronimo
@@ -289,6 +289,18 @@ int main(int argc, char* argv[]) {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderClear(renderer);
 
+  TTF_Init();
+  TTF_Font *font = TTF_OpenFont("arial.ttf", 20);
+  if (font == NULL) {
+    std::cout << "Could not load font: " << TTF_GetError() << std::endl;
+    return 1;
+  }
+  SDL_Surface *surface = TTF_RenderText_Solid(font, "Score", {255, 255, 255});
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+  SDL_Rect text_rect = { x_display, y_display, 100, 50 };
+  SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+  SDL_FreeSurface(surface);
+
   bool is_running = true;
   while (is_running) {
     if (SDL_PollEvent(&window_event)) {
@@ -332,6 +344,9 @@ int main(int argc, char* argv[]) {
     }
     update();
     render(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+    SDL_RenderPresent(renderer);
+
     if (Field[0][Columns / 2].isFilled && CurrentTetromino.isCollided()) {
       is_running = false;
     }
@@ -339,5 +354,6 @@ int main(int argc, char* argv[]) {
 
   SDL_DestroyWindow(window);
   SDL_Quit();
+  TTF_Quit();
   return EXIT_SUCCESS;
 }
