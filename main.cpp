@@ -19,7 +19,12 @@ int last_time = current_time;
 
 int score = 0;
 
-bool Field[Rows][Columns] = { 0 };
+struct Cell {
+  bool isFilled = false;
+  int color_r = 255, color_g = 255, color_b = 255;
+};
+
+Cell Field[Rows][Columns];
 
 struct TetrominoData {
   int shape[4][4];
@@ -109,7 +114,7 @@ class Tetromino {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
         if (data.shape[i][j]) {
-          if (i + y >= Rows || j + x < 0 || j + x >= Columns || Field[i + y][j + x]) {
+          if (i + y >= Rows || j + x < 0 || j + x >= Columns || Field[i + y][j + x].isFilled) {
             return true;
           }
         }
@@ -161,7 +166,7 @@ void destroyLine() {
   for (int i = Rows - 1; i >= 0; i--) {
     bool is_full = true;
     for (int j = 0; j < Columns; j++) {
-      if (!Field[i][j]) {
+      if (!Field[i][j].isFilled) {
         is_full = false;
         break;
       }
@@ -185,11 +190,9 @@ void render(SDL_Renderer* renderer) {
   //Draw field
   for (int i = 0; i < Rows; i++) {
     for (int j = 0; j < Columns; j++) {
-      if (Field[i][j] == 0) {
-        SDL_Rect tile = { j * TitleSize + 2, i * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderFillRect(renderer, &tile);
-      }
+      SDL_Rect tile = { j * TitleSize + 2, i * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+      SDL_SetRenderDrawColor(renderer, Field[i][j].color_r, Field[i][j].color_g, Field[i][j].color_b, 255);
+      SDL_RenderFillRect(renderer, &tile);
     }
   }
   //Draw ghost
@@ -207,15 +210,18 @@ void render(SDL_Renderer* renderer) {
     }
   }
   //Draw tetronimo
-  SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; j++) {
-      if (CurrentTetromino.data.shape[i][j]) {
-        SDL_Rect tile = { (CurrentTetromino.x + j) * TitleSize + 2, (CurrentTetromino.y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
-        SDL_RenderFillRect(renderer, &tile);
+  if (!CurrentTetromino.isCollided()) {
+    SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (CurrentTetromino.data.shape[i][j]) {
+          SDL_Rect tile = { (CurrentTetromino.x + j) * TitleSize + 2, (CurrentTetromino.y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+          SDL_RenderFillRect(renderer, &tile);
+        }
       }
     }
   }
+  
   //Draw Side Panel
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_Rect side_panel = { Columns * TitleSize, 0, 200, HEIGHT };
@@ -251,7 +257,10 @@ void update(SDL_Renderer* renderer) {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
         if (CurrentTetromino.data.shape[i][j]) {
-          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j] = 1;
+          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].isFilled = true;
+          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_r = CurrentTetromino.data.color_r;
+          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_g = CurrentTetromino.data.color_g;
+          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_b = CurrentTetromino.data.color_b;
         }
       }
     }
@@ -323,7 +332,7 @@ int main(int argc, char* argv[]) {
       }
     }
     update(renderer);
-    if (Field[0][Columns / 2] && CurrentTetromino.isCollided()) {
+    if (Field[0][Columns / 2].isFilled && CurrentTetromino.isCollided()) {
       is_running = false;
     }
   }
