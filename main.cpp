@@ -177,7 +177,7 @@ void destroyLine() {
           Field[k][j] = Field[k - 1][j];
         }
       }
-      score += 100;
+      score += 1;
       i++;
     }
   }
@@ -290,7 +290,8 @@ int main(int argc, char* argv[]) {
   SDL_RenderClear(renderer);
 
   TTF_Init();
-  TTF_Font *font = TTF_OpenFont("arial.ttf", 20);
+  TTF_Font *font = TTF_OpenFont("arial.ttf", 50);
+  TTF_Font *score_font = TTF_OpenFont("arial.ttf", 100);
   if (font == NULL) {
     std::cout << "Could not load font: " << TTF_GetError() << std::endl;
     return 1;
@@ -345,6 +346,15 @@ int main(int argc, char* argv[]) {
     update();
     render(renderer);
     SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+    //Display score
+    std::string score_text = std::to_string(score);
+    surface = TTF_RenderText_Solid(score_font, score_text.c_str(), {255, 255, 255});
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    text_rect = { x_display, y_display + 50, 100, 150 };
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &text_rect);
+    SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+    SDL_FreeSurface(surface);
     SDL_RenderPresent(renderer);
 
     if (Field[0][Columns / 2].isFilled && CurrentTetromino.isCollided()) {
