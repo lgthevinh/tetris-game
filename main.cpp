@@ -291,7 +291,7 @@ int main(int argc, char* argv[]) {
 
   TTF_Init();
   TTF_Font *font = TTF_OpenFont("arial.ttf", 50);
-  TTF_Font *score_font = TTF_OpenFont("arial.ttf", 100);
+  TTF_Font *score_font = TTF_OpenFont("arial.ttf", 200);
   if (font == NULL) {
     std::cout << "Could not load font: " << TTF_GetError() << std::endl;
     return 1;
