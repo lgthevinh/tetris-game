@@ -24,12 +24,12 @@ struct Cell {
   int color_r = 255, color_g = 255, color_b = 255;
 };
 
-Cell Field[Rows][Columns];
-
 struct TetrominoData {
   int shape[4][4];
   int color_r, color_g, color_b;
 };
+
+Cell Field[Rows][Columns];
 
 TetrominoData Tetrominos[7] = {
   {
@@ -343,14 +343,19 @@ int main(int argc, char* argv[]) {
         }
       }
     }
+
     update();
     render(renderer);
     SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+
     //Display score
     std::string score_text = std::to_string(score);
+
+    
+
     surface = TTF_RenderText_Solid(score_font, score_text.c_str(), {255, 255, 255});
     texture = SDL_CreateTextureFromSurface(renderer, surface);
-    text_rect = { x_display, y_display + 50, 100, 150 };
+    text_rect = { x_display, y_display + 50, 100, 70 };
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &text_rect);
     SDL_RenderCopy(renderer, texture, NULL, &text_rect);
