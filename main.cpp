@@ -18,6 +18,16 @@ int current_time = SDL_GetTicks();
 int last_time = current_time;
 
 int score = 0;
+int score_digits = 1;
+
+int countDigits(int n) {
+  int count = 0;
+  while (n != 0) {
+    n /= 10;
+    count++;
+  }
+  return count;
+}
 
 struct Cell {
   bool isFilled = false;
@@ -102,14 +112,17 @@ class Tetromino {
   int x, y;
   int ghost_x, ghost_y;
   TetrominoData data;
+
   Tetromino() {
     x = Columns / 2 - 2;
     y = -1;
     getData();
   }
+
   void getData() {
     data = Tetrominos[rand() % 7];
   }
+  
   bool isCollided() {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
@@ -122,6 +135,7 @@ class Tetromino {
     }
     return false;
   }
+
   void rotate() {
     int temp[4][4];
     for (int i = 0; i < 4; i++) {
@@ -143,12 +157,14 @@ class Tetromino {
     }
     
   }
+
   void hardDrop() {
     while (!isCollided()) {
       this->y++;
     }
     this->y--;
   }
+  
   void getGhost() {
     ghost_x = x;
     int temp = y;
@@ -165,24 +181,28 @@ void destroyLine() {
   // Loop through each row, check for full row
   for (int i = Rows - 1; i >= 0; i--) {
     bool is_full = true;
+
     for (int j = 0; j < Columns; j++) {
       if (!Field[i][j].isFilled) {
         is_full = false;
         break;
       }
     }
+
     if (is_full) {
       for (int k = i; k > 0; k--) {
         for (int j = 0; j < Columns; j++) {
           Field[k][j] = Field[k - 1][j];
         }
       }
+
       score += 1;
       i++;
     }
   }
 }
 
+// Initialize tetrominos
 Tetromino CurrentTetromino = Tetromino();
 Tetromino NextTetromino = Tetromino();
 
@@ -197,6 +217,7 @@ void render(SDL_Renderer* renderer) {
   }
   //Draw ghost
   CurrentTetromino.getGhost();
+
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (CurrentTetromino.data.shape[i][j]) {
@@ -229,6 +250,7 @@ void render(SDL_Renderer* renderer) {
 
   //Draw next tetronimo
   SDL_SetRenderDrawColor(renderer, NextTetromino.data.color_r, NextTetromino.data.color_g, NextTetromino.data.color_b, 255);
+  
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (NextTetromino.data.shape[i][j]) {
@@ -238,6 +260,9 @@ void render(SDL_Renderer* renderer) {
     }
   }
   //Draw score
+  if (score > 0) {
+    score_digits = countDigits(score);
+  }
   
   //Present
   SDL_RenderPresent(renderer);
@@ -292,12 +317,15 @@ int main(int argc, char* argv[]) {
   TTF_Init();
   TTF_Font *font = TTF_OpenFont("arial.ttf", 50);
   TTF_Font *score_font = TTF_OpenFont("arial.ttf", 200);
+
   if (font == NULL) {
     std::cout << "Could not load font: " << TTF_GetError() << std::endl;
     return 1;
   }
+
   SDL_Surface *surface = TTF_RenderText_Solid(font, "Score", {255, 255, 255});
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
   SDL_Rect text_rect = { x_display, y_display, 100, 50 };
   SDL_RenderCopy(renderer, texture, NULL, &text_rect);
   SDL_FreeSurface(surface);
@@ -349,13 +377,12 @@ int main(int argc, char* argv[]) {
     SDL_RenderCopy(renderer, texture, NULL, &text_rect);
 
     //Display score
-    std::string score_text = std::to_string(score);
 
-    
-
-    surface = TTF_RenderText_Solid(score_font, score_text.c_str(), {255, 255, 255});
+    surface = TTF_RenderText_Solid(score_font, std::to_string(score).c_str(), {255, 255, 255});
     texture = SDL_CreateTextureFromSurface(renderer, surface);
-    text_rect = { x_display, y_display + 50, 100, 70 };
+
+    text_rect = { x_display + 55 - (score_digits * 15), y_display + 50, (score_digits * 25), 50};
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &text_rect);
     SDL_RenderCopy(renderer, texture, NULL, &text_rect);
@@ -370,5 +397,6 @@ int main(int argc, char* argv[]) {
   SDL_DestroyWindow(window);
   SDL_Quit();
   TTF_Quit();
+  
   return EXIT_SUCCESS;
 }
