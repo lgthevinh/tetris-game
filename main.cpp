@@ -203,8 +203,8 @@ void destroyLine() {
 }
 
 // Initialize tetrominos
-Tetromino CurrentTetromino = Tetromino();
-Tetromino NextTetromino = Tetromino();
+Tetromino* CurrentTetromino = new Tetromino();
+Tetromino* NextTetromino = new Tetromino();
 
 void render(SDL_Renderer* renderer) {
   //Draw field
@@ -216,27 +216,27 @@ void render(SDL_Renderer* renderer) {
     }
   }
   //Draw ghost
-  CurrentTetromino.getGhost();
+  CurrentTetromino->getGhost();
 
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
-      if (CurrentTetromino.data.shape[i][j]) {
-        SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
-        SDL_Rect outline = { (CurrentTetromino.ghost_x + j) * TitleSize + 2, (CurrentTetromino.ghost_y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+      if (CurrentTetromino->data.shape[i][j]) {
+        SDL_SetRenderDrawColor(renderer, CurrentTetromino->data.color_r, CurrentTetromino->data.color_g, CurrentTetromino->data.color_b, 255);
+        SDL_Rect outline = { (CurrentTetromino->ghost_x + j) * TitleSize + 2, (CurrentTetromino->ghost_y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
         SDL_RenderFillRect(renderer, &outline);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_Rect tile = { (CurrentTetromino.ghost_x + j) * TitleSize + 4, (CurrentTetromino.ghost_y + i) * TitleSize + 4, TitleSize - 9, TitleSize - 9 };
+        SDL_Rect tile = { (CurrentTetromino->ghost_x + j) * TitleSize + 4, (CurrentTetromino->ghost_y + i) * TitleSize + 4, TitleSize - 9, TitleSize - 9 };
         SDL_RenderFillRect(renderer, &tile);
       }
     }
   }
   //Draw tetronimo
-  if (!CurrentTetromino.isCollided()) {
-    SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
+  if (!CurrentTetromino->isCollided()) {
+    SDL_SetRenderDrawColor(renderer, CurrentTetromino->data.color_r, CurrentTetromino->data.color_g, CurrentTetromino->data.color_b, 255);
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        if (CurrentTetromino.data.shape[i][j]) {
-          SDL_Rect tile = { (CurrentTetromino.x + j) * TitleSize + 2, (CurrentTetromino.y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+        if (CurrentTetromino->data.shape[i][j]) {
+          SDL_Rect tile = { (CurrentTetromino->x + j) * TitleSize + 2, (CurrentTetromino->y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
           SDL_RenderFillRect(renderer, &tile);
         }
       }
@@ -249,11 +249,11 @@ void render(SDL_Renderer* renderer) {
   SDL_RenderFillRect(renderer, &side_panel);
 
   //Draw next tetronimo
-  SDL_SetRenderDrawColor(renderer, NextTetromino.data.color_r, NextTetromino.data.color_g, NextTetromino.data.color_b, 255);
+  SDL_SetRenderDrawColor(renderer, NextTetromino->data.color_r, NextTetromino->data.color_g, NextTetromino->data.color_b, 255);
   
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
-      if (NextTetromino.data.shape[i][j]) {
+      if (NextTetromino->data.shape[i][j]) {
         SDL_Rect tile = { (j + Columns + 2) * TitleSize - 20, (i + 2) * TitleSize, TitleSize - 4, TitleSize - 4 };
         SDL_RenderFillRect(renderer, &tile);
       }
@@ -274,27 +274,24 @@ void update() {
   destroyLine();
   if (deltatime > 500) {
     //Move down
-    CurrentTetromino.y++;
+    CurrentTetromino->y++;
     last_time = current_time;
     deltatime = 0;
   }
-  if (CurrentTetromino.isCollided()) {
+  if (CurrentTetromino->isCollided()) {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        if (CurrentTetromino.data.shape[i][j]) {
-          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].isFilled = true;
-          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_r = CurrentTetromino.data.color_r;
-          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_g = CurrentTetromino.data.color_g;
-          Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_b = CurrentTetromino.data.color_b;
+        if (CurrentTetromino->data.shape[i][j]) {
+          Field[CurrentTetromino->y + i - 1][CurrentTetromino->x + j].isFilled = true;
+          Field[CurrentTetromino->y + i - 1][CurrentTetromino->x + j].color_r = CurrentTetromino->data.color_r;
+          Field[CurrentTetromino->y + i - 1][CurrentTetromino->x + j].color_g = CurrentTetromino->data.color_g;
+          Field[CurrentTetromino->y + i - 1][CurrentTetromino->x + j].color_b = CurrentTetromino->data.color_b;
         }
       }
     }
-
-    Tetromino* tetromino = new Tetromino();
+    
     CurrentTetromino = NextTetromino;
-    NextTetromino = *tetromino;
-
-    delete tetromino;
+    NextTetromino = new Tetromino();
   }
 }
 
@@ -336,35 +333,35 @@ int main(int argc, char* argv[]) {
       if (window_event.type == SDL_QUIT || window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
         is_running = false;
       }
-      if (window_event.type == SDL_KEYDOWN && !CurrentTetromino.isCollided()) {
+      if (window_event.type == SDL_KEYDOWN && !CurrentTetromino->isCollided()) {
         switch (window_event.key.keysym.scancode) {
           case SDL_SCANCODE_A:
-            CurrentTetromino.x--;
-            CurrentTetromino.ghost_x--;
-            if (CurrentTetromino.isCollided()) {
-              CurrentTetromino.x++;
-              CurrentTetromino.ghost_x++;
+            CurrentTetromino->x--;
+            CurrentTetromino->ghost_x--;
+            if (CurrentTetromino->isCollided()) {
+              CurrentTetromino->x++;
+              CurrentTetromino->ghost_x++;
             }
             break;
           case SDL_SCANCODE_D:
-            CurrentTetromino.x++;
-            CurrentTetromino.ghost_x++;
-            if (CurrentTetromino.isCollided()) {
-              CurrentTetromino.x--;
-              CurrentTetromino.ghost_x--;
+            CurrentTetromino->x++;
+            CurrentTetromino->ghost_x++;
+            if (CurrentTetromino->isCollided()) {
+              CurrentTetromino->x--;
+              CurrentTetromino->ghost_x--;
             }
             break;
           case SDL_SCANCODE_S:
-            CurrentTetromino.y++;
-            if (CurrentTetromino.isCollided()) {
-              CurrentTetromino.y--;
+            CurrentTetromino->y++;
+            if (CurrentTetromino->isCollided()) {
+              CurrentTetromino->y--;
             }
             break;
           case SDL_SCANCODE_W:
-            CurrentTetromino.hardDrop();
+            CurrentTetromino->hardDrop();
             break;
           case SDL_SCANCODE_SPACE:
-            CurrentTetromino.rotate();
+            CurrentTetromino->rotate();
             break;
           default:
             break;
@@ -389,7 +386,7 @@ int main(int argc, char* argv[]) {
     SDL_FreeSurface(surface);
     SDL_RenderPresent(renderer);
 
-    if (Field[0][Columns / 2].isFilled && CurrentTetromino.isCollided()) {
+    if (Field[0][Columns / 2].isFilled && CurrentTetromino->isCollided()) {
       is_running = false;
     }
   }
