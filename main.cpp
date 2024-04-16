@@ -293,18 +293,19 @@ int main(int argc, char* argv[]) {
   TTF_Font *font = TTF_OpenFont("arial.ttf", 50);
   TTF_Font *score_font = TTF_OpenFont("arial.ttf", 200);
 
-  // SDL_Surface *surface = TTF_RenderText_Solid(font, "Score", {255, 255, 255});
-  // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+  SDL_Surface *surface = TTF_RenderText_Solid(font, "Score", {255, 255, 255});
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-  // SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+  SDL_Rect text_rect = { x_display, y_display, 100, 50 };
+  SDL_RenderCopy(renderer, texture, NULL, &text_rect);
 
-  // SDL_DestroyTexture(texture);
-  // SDL_FreeSurface(surface);
+  SDL_DestroyTexture(texture);
+  SDL_FreeSurface(surface);
 
   SDL_Surface *score_surface = NULL;
   SDL_Texture *score_texture = NULL;
 
-  SDL_Rect score_rect = { x_display, y_display + 50, 100, 150 };
+  SDL_Rect score_rect = { x_display + 25, y_display + 50, 25, 50 };
   
   if (font == NULL) {
     std::cout << "Could not load font: " << TTF_GetError() << std::endl;
