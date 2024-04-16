@@ -237,7 +237,6 @@ void render(SDL_Renderer* renderer) {
       }
     }
   }
-  //Draw score
   
   //Present
   SDL_RenderPresent(renderer);
@@ -246,13 +245,16 @@ void render(SDL_Renderer* renderer) {
 void update() {
   current_time = SDL_GetTicks();
   deltatime = current_time - last_time;
+
   destroyLine();
+
   if (deltatime > 500) {
     //Move down
     CurrentTetromino.y++;
     last_time = current_time;
     deltatime = 0;
   }
+
   if (CurrentTetromino.isCollided()) {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
