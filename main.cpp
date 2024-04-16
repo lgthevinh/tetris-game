@@ -357,8 +357,7 @@ int main(int argc, char* argv[]) {
     render(renderer);
 
     //Display score
-    std::string score_text = std::to_string(score);
-    score_surface = TTF_RenderText_Solid(score_font, score_text.c_str(), {255, 255, 255});
+    score_surface = TTF_RenderText_Solid(score_font, std::to_string(score).c_str(), {255, 255, 255});
     score_texture = SDL_CreateTextureFromSurface(renderer, score_surface);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
