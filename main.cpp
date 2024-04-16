@@ -298,7 +298,7 @@ int main(int argc, char* argv[]) {
 
   SDL_Rect text_rect = { x_display, y_display, 100, 50 };
   SDL_RenderCopy(renderer, texture, NULL, &text_rect);
-
+  
   SDL_DestroyTexture(texture);
   SDL_FreeSurface(surface);
 
