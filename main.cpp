@@ -17,7 +17,7 @@ int deltatime = 0; // 1 second = 1000 milliseconds
 int current_time = SDL_GetTicks();
 int last_time = current_time;
 
-int score = 0;
+int score = 9;
 
 struct Cell {
   bool isFilled = false;
@@ -248,7 +248,7 @@ void update() {
 
   destroyLine();
 
-  if (deltatime > 500) {
+  if (deltatime > 500 - (score * 10)) {
     //Move down
     CurrentTetromino.y++;
     last_time = current_time;
@@ -359,6 +359,11 @@ int main(int argc, char* argv[]) {
     render(renderer);
 
     //Display score
+
+    if (score > 9) {
+      score_rect = { x_display + 25, y_display + 50, 50, 50 };
+    }
+
     score_surface = TTF_RenderText_Solid(score_font, std::to_string(score).c_str(), {255, 255, 255});
     score_texture = SDL_CreateTextureFromSurface(renderer, score_surface);
 
