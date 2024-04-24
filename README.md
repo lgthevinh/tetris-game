@@ -34,3 +34,9 @@ or
 make
 ```
 for the Makefile
+
+## Game instructions
+
+- Use the left and right arrow keys to move the tetromino left and right.
+- Use the up arrow key for hard drop, or the down arrow key for soft drop.
+- Use the space key to rotate the tetromino.
