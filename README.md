@@ -12,6 +12,17 @@ In this project, I implemented the Tetris game using the C++ programming languag
 - [Introduction](#introduction)
 - [Table of contents](#table-of-contents)
 - [Game features](#game-features)
+- [Installation and execution](#installation-and-execution)
+- [Game instructions](#game-instructions)
+- [Source code structure](#source-code-structure)
+  - [Constants variables](#constants-variables)
+  - [Data and objects structure](#data-and-objects-structure)
+  - [Game logic](#game-logic)
+  - [Game control flow](#game-control-flow)
+- [Bucket list (what I wanted to do in the game)](#bucket-list-what-i-wanted-to-do-in-the-game)
+  - [Core features](#core-features)
+  - [Additional features](#additional-features)
+- [Conclusion](#conclusion)
 
 # Game features 
 
