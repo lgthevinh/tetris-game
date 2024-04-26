@@ -15,7 +15,7 @@ In this project, I implemented the Tetris game using the C++ programming languag
 
 # Game features 
 
-Basically this game inherits the orginal Tetris game. The game has the following features:
+Basically this game inherits the orginal Tetris game, but all of the feature were developed without inheriting open-source. The game has the following features:
 
 - The game has a grid with a size of 10x20 cells.
 - The game has 7 different types of tetrominoes.
