@@ -17,7 +17,7 @@ int deltatime = 0; // 1 second = 1000 milliseconds
 int current_time = SDL_GetTicks();
 int last_time = current_time;
 
-int score = 9;
+int score = 0;
 
 struct Cell {
   bool isFilled = false;
