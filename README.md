@@ -251,3 +251,9 @@ The game control flow is implemented using the SDL2 library. The game loop is im
 - &#x2610; Hold tetrominoes
 - &#x2610; Sound effects
 - &#x2610; Start, pause, and game over screens
+
+# Conclusion
+
+This project is a part of the course "Advanced Programming" at the University of Engineering and Technology, Vietnam National University, Hanoi. After completing this project, I have learned how to implement a simple game using the C++ programming language and the SDL2 library using advances programming techniques learned in the course.
+
+I hope you enjoy playing the game!
