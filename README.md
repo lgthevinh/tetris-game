@@ -1,8 +1,9 @@
-# The Tetris Game
+The Tetris Game
+========
 
-This is a repository for the Tetris game. This project is a part of the course "Advanced Programming" at the University of Engieering and Technology, Vietnam National University, Hanoi.
+This is a repository for the Tetris game. This project is a part of the course "Advanced Programming" at the University of Engineering and Technology, Vietnam National University, Hanoi.
 
-## Introduction
+# Introduction
 
 In this project, we will implement the Tetris game using the C++ programming language. The game will be implemented using the SDL2 library.
 
