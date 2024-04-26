@@ -27,7 +27,7 @@ git clone [repository_url]
 To run the game, you need to compile the source code using the following command:
 
 ```bash
-g++ main.cpp -o main -lSDL2
+g++ -std=c++17 main.cpp -I"include" -L"lib" -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -o main
 ```
 or
 ```bash
