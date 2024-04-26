@@ -2,11 +2,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-const int TitleSize = 30; // 10 pixels
+const int TileSize = 30; // 30 pixels
 const int Rows = 20, Columns = 10;
 
-const int WIDTH = Columns * TitleSize + 200; // 200 pixels for scoring display
-const int HEIGHT = Rows * TitleSize;
+const int WIDTH = Columns * TileSize + 200; // 200 pixels for scoring display
+const int HEIGHT = Rows * TileSize;
 
 const int set_time = 700;
 
@@ -190,7 +190,7 @@ void render(SDL_Renderer* renderer) {
   //Draw field
   for (int i = 0; i < Rows; i++) {
     for (int j = 0; j < Columns; j++) {
-      SDL_Rect tile = { j * TitleSize + 2, i * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+      SDL_Rect tile = { j * TileSize + 2, i * TileSize + 2, TileSize - 4, TileSize - 4 };
       SDL_SetRenderDrawColor(renderer, Field[i][j].color_r, Field[i][j].color_g, Field[i][j].color_b, 255);
       SDL_RenderFillRect(renderer, &tile);
     }
@@ -201,10 +201,10 @@ void render(SDL_Renderer* renderer) {
     for (int j = 0; j < 4; j++) {
       if (CurrentTetromino.data.shape[i][j]) {
         SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
-        SDL_Rect outline = { (CurrentTetromino.ghost_x + j) * TitleSize + 2, (CurrentTetromino.ghost_y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+        SDL_Rect outline = { (CurrentTetromino.ghost_x + j) * TileSize + 2, (CurrentTetromino.ghost_y + i) * TileSize + 2, TileSize - 4, TileSize - 4 };
         SDL_RenderFillRect(renderer, &outline);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_Rect tile = { (CurrentTetromino.ghost_x + j) * TitleSize + 4, (CurrentTetromino.ghost_y + i) * TitleSize + 4, TitleSize - 9, TitleSize - 9 };
+        SDL_Rect tile = { (CurrentTetromino.ghost_x + j) * TileSize + 4, (CurrentTetromino.ghost_y + i) * TileSize + 4, TileSize - 9, TileSize - 9 };
         SDL_RenderFillRect(renderer, &tile);
       }
     }
@@ -215,7 +215,7 @@ void render(SDL_Renderer* renderer) {
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
         if (CurrentTetromino.data.shape[i][j]) {
-          SDL_Rect tile = { (CurrentTetromino.x + j) * TitleSize + 2, (CurrentTetromino.y + i) * TitleSize + 2, TitleSize - 4, TitleSize - 4 };
+          SDL_Rect tile = { (CurrentTetromino.x + j) * TileSize + 2, (CurrentTetromino.y + i) * TileSize + 2, TileSize - 4, TileSize - 4 };
           SDL_RenderFillRect(renderer, &tile);
         }
       }
@@ -224,7 +224,7 @@ void render(SDL_Renderer* renderer) {
   
   //Draw Side Panel
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_Rect side_panel = { Columns * TitleSize, 0, 200, 200 };
+  SDL_Rect side_panel = { Columns * TileSize, 0, 200, 200 };
   SDL_RenderFillRect(renderer, &side_panel);
 
   //Draw next tetronimo
@@ -232,7 +232,7 @@ void render(SDL_Renderer* renderer) {
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (NextTetromino.data.shape[i][j]) {
-        SDL_Rect tile = { (j + Columns + 2) * TitleSize - 20, (i + 2) * TitleSize, TitleSize - 4, TitleSize - 4 };
+        SDL_Rect tile = { (j + Columns + 2) * TileSize - 20, (i + 2) * TileSize, TileSize - 4, TileSize - 4 };
         SDL_RenderFillRect(renderer, &tile);
       }
     }
