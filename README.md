@@ -54,3 +54,18 @@ make
 - Use the left and right arrow keys to move the tetromino left and right.
 - Use the up arrow key for hard drop, or the down arrow key for soft drop.
 - Use the space key to rotate the tetromino.
+
+# Source code structure
+
+There are some constains variables that you can change to customize the game:
+
+```cpp
+const int TileSize = 30; // This variable hold the size of each cell in the grid (pixel)
+
+const Rows = 20, Columns = 10; // These variables hold the number of rows and columns in the grid (for my game, it is 20x10)
+
+const set_times = 700; // This variable hold the time interval between each drop of the tetromino (milisecond)
+
+const int WIDTH = Columns * TileSize + 200; // 200 pixels for scoring display
+const int HEIGHT = Rows * TileSize; // These variables is automatically calculated based on the number of rows and columns
+```
