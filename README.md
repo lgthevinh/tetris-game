@@ -51,8 +51,8 @@ make
 
 # Game instructions
 
-- Use the left and right arrow keys to move the tetromino left and right.
-- Use the up arrow key for hard drop, or the down arrow key for soft drop.
+- Use the A and D keys to move the tetromino left and right.
+- Use the W key for hard drop, or the S key for soft drop.
 - Use the space key to rotate the tetromino.
 
 # Source code structure
@@ -172,4 +172,64 @@ The game has two main functions: update and render. The update function is used 
       delete tetromino;
     }
   }; 
+```
+
+### Game control flow
+
+The game control flow is implemented using the SDL2 library. The game loop is implemented using the following code:
+
+```cpp
+  bool is_running = true;
+  while (is_running) {
+    if (SDL_PollEvent(&window_event)) {
+
+      if (window_event.type == SDL_QUIT || window_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+        is_running = false;
+      }
+
+      if (window_event.type == SDL_KEYDOWN && !CurrentTetromino.isCollided()) {
+        // This is the control flow of the game, the tetromino can be moved left, right, down, rotated, or hard dropped
+        switch (window_event.key.keysym.scancode) {
+          case SDL_SCANCODE_A:
+            CurrentTetromino.x--;
+            CurrentTetromino.ghost_x--;
+            if (CurrentTetromino.isCollided()) { // Check if the tetromino is collided with the grid or other tetrominoes, then move back
+              CurrentTetromino.x++;
+              CurrentTetromino.ghost_x++;
+            }
+            break;
+          case SDL_SCANCODE_D:
+            CurrentTetromino.x++;
+            CurrentTetromino.ghost_x++;
+            if (CurrentTetromino.isCollided()) {
+              CurrentTetromino.x--;
+              CurrentTetromino.ghost_x--;
+            }
+            break;
+          case SDL_SCANCODE_S:
+            CurrentTetromino.y++;
+            if (CurrentTetromino.isCollided()) {
+              CurrentTetromino.y--;
+            }
+            break;
+          case SDL_SCANCODE_W:
+            CurrentTetromino.hardDrop();
+            break;
+          case SDL_SCANCODE_SPACE:
+            CurrentTetromino.rotate();
+            break;
+          default:
+            break;
+        }
+      }
+      
+      // If the first row of the grid is filled and the current tetromino is collided, then the game is over
+      if (Field[0][Columns / 2].isFilled && CurrentTetromino.isCollided()) {
+        is_running = false;
+      }
+    }
+
+    update();
+    render();
+  }
 ```
