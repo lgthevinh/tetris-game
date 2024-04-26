@@ -117,3 +117,59 @@ There are some constants variables that you can change to customize the game:
     void getGhost(); // This function is used to get the position of the ghost tetromino
 }
 ```
+### Game logic
+
+The game has two main functions: update and render. The update function is used to update the game state, while the render function is used to render the game.
+
+```cpp
+  void render() { // This function is used to render the game
+    /* 
+      The tetromino is rendered by drawing cells in a for loop that iterates through the 4x4 matrix of the tetromino data. The same is done for the ghost tetromino.
+    */
+    SDL_SetRenderDrawColor(renderer, CurrentTetromino.data.color_r, CurrentTetromino.data.color_g, CurrentTetromino.data.color_b, 255);
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (CurrentTetromino.data.shape[i][j]) {
+          SDL_Rect tile = { (CurrentTetromino.x + j) * TileSize + 2, (CurrentTetromino.y + i) * TileSize + 2, TileSize - 4, TileSize - 4 };
+          SDL_RenderFillRect(renderer, &tile);
+        }
+      }
+    }
+
+
+
+  };  
+  
+  void update() { // This function is used to update the game state
+    destroyLine(); // This function is used to destroy the line if it is full, the logic behind is to check the grid rows if it is full, then destroy it and move the above rows down (for more detail, please check the source code)
+
+    if (deltatime > 500 - (score * 10)) {
+      // This logic hold the time interval between each drop of the tetromino, the interval will be decreased based on the score (decreased by 10 milisecond for each score)
+      //Move down
+      CurrentTetromino.y++;
+      last_time = current_time;
+      deltatime = 0;
+    } 
+    
+    // This logic is used to check if the tetromino is collided with the grid or other tetrominoes
+    // If the tetromino is collided, then the tetromino will be placed on the grid (update cells data based on tetromino data) and a new tetromino will be generated
+    if (CurrentTetromino.isCollided()) {
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          if (CurrentTetromino.data.shape[i][j]) {
+            Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].isFilled = true;
+            Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_r = CurrentTetromino.data.color_r;
+            Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_g = CurrentTetromino.data.color_g;
+            Field[CurrentTetromino.y + i - 1][CurrentTetromino.x + j].color_b = CurrentTetromino.data.color_b;
+          }
+        }
+      }
+
+      Tetromino* tetromino = new Tetromino();
+      CurrentTetromino = NextTetromino;
+      NextTetromino = *tetromino;
+
+      delete tetromino;
+    }
+  }; 
+```
