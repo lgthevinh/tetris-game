@@ -246,8 +246,8 @@ The game control flow is implemented using the SDL2 library. The game loop is im
 
 ### Additional features
 
-- &#x2611; Ghost tetrominoes
 - &#x2611; Display next tetrominoes
+- &#x2611; Ghost tetrominoes
 - &#x2610; Hold tetrominoes
 - &#x2610; Sound effects
 - &#x2610; Start, pause, and game over screens
