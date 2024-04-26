@@ -233,3 +233,21 @@ The game control flow is implemented using the SDL2 library. The game loop is im
     render();
   }
 ```
+
+# Bucket list (what I wanted to do in the game)
+
+### Core features
+
+- &#x2611; Tetrominoes
+- &#x2611; Grid
+- &#x2611; Rotable tetrominoes
+- &#x2611; Droppable tetrominoes
+- &#x2611; Score system
+
+### Additional features
+
+- &#x2611; Ghost tetrominoes
+- &#x2611; Display next tetrominoes
+- &#x2610; Hold tetrominoes
+- &#x2610; Sound effects
+- &#x2610; Start, pause, and game over screens
