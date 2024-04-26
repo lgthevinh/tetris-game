@@ -57,15 +57,63 @@ make
 
 # Source code structure
 
-There are some constains variables that you can change to customize the game:
+### Constants variables
+There are some constants variables that you can change to customize the game:
 
 ```cpp
-const int TileSize = 30; // This variable hold the size of each cell in the grid (pixel)
+  const int TileSize = 30; // This variable hold the size of each cell in the grid (pixel)
 
-const Rows = 20, Columns = 10; // These variables hold the number of rows and columns in the grid (for my game, it is 20x10)
+  const Rows = 20, Columns = 10; // These variables hold the number of rows and columns in the grid (for my game, it is 20x10)
 
-const set_times = 700; // This variable hold the time interval between each drop of the tetromino (milisecond)
+  const set_times = 700; // This variable hold the time interval between each drop of the tetromino (milisecond)
 
-const int WIDTH = Columns * TileSize + 200; // 200 pixels for scoring display
-const int HEIGHT = Rows * TileSize; // These variables is automatically calculated based on the number of rows and columns
+  const int WIDTH = Columns * TileSize + 200; // 200 pixels for scoring display
+  const int HEIGHT = Rows * TileSize; // These variables is automatically calculated based on the number of rows and columns
+  ```
+
+
+  ### Data and objects structure:
+
+  ```cpp
+  // The cell structure hold the data of each cell in the grid, including the color of the cell and whether the cell is filled or not
+  struct Cell {
+    bool isFilled = false;
+    int color_r = 255, color_g = 255, color_b = 255;
+  };
+
+  // The TetrominoData structure includes the shape of the tetromino stored in a 4x4 matrix, and the color of the tetromino
+  struct TetrominoData {
+    int shape[4][4];
+    int color_r, color_g, color_b;
+  };
+
+  // An array storing 7 different types of tetrominoes
+  TetrominoData Tetrominos[7] = {
+    {
+      {
+        {0, 0, 0, 0},
+        {1, 1, 1, 1},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+      },
+      255, 0, 0 // This is the shape of the I tetromino (example)
+    },
+    ...
+  };
+
+  Cell Field[Rows][Columns]; // The grid of the game
+
+  class Tetromino {
+    public:
+    int x, y; // The position of the tetromino
+    int ghost_x, ghost_y; // The position of the ghost tetromino
+    TetrominoData data; // The data of the tetromino
+    
+    Tetromino(); // Constructor
+    void getData(); // This function is used to get the data of the tetromino randomly
+    bool isCollided(); // This function is used to check if the tetromino is collided with the grid or other tetrominoes
+    void rotate();
+    void hardDrop();
+    void getGhost(); // This function is used to get the position of the ghost tetromino
+}
 ```
